@@ -57,24 +57,23 @@ body {
             <li><a href="#results">Results</a></li>
             <li><a href="#report">Report</a></li>
             <li><a href="#code">Appendix: Code</a></li>
-            <li><a href="https://github.com/pranavtbhat/CS275" target="_blank">GitHub Repo</a></li>
+            <li><a href="https://github.com/bhargav265/Simulation_of_self_driving_car" target="_blank">GitHub Repo</a></li>
         </ol>
         </div>
 
         <h2 id="abstract">Abstract</h2>
-        Abstract here!
+        For the past decade, there has been a surge of interest in self driving cars. This is due to breakthroughs in the field of deep learning where researchers train deep neural networks to perform tasks that typically require human intervention. CNN’s apply the models from deep learning to identify patterns and features in images,  making them useful in the field of Computer Vision. Examples of these are object detection, image classification, image captioning, etc. In this project, we have trained CNN’s to images captured by cars while driving to drive the car autonomously. The CNN learns some unique features from the images and generates steering predictions which help drive the car without a human. For testing purposes and preparing the dataset the Unity based simulator provided by Udacity was used.
+
         <br/><br/>
 
 		<h2 id="introduction">Introduction</h2>
-		Paragraph1
+		In recent years, autonomous driving algorithms using low-cost vehicle-mounted cameras have attracted increasing research endeavors from both, academia and industry. Level - 3/4 autonomous vehicles are potentially becoming a reality in the near future. Primary reasons for drastic technical achievements in this fields are technical breakthroughs and excellent research being done in the field of computer vision and machine learning and also the low-cost vehicle-mounted cameras which can either independently provide actionable information or complement other sensors. Many vision-based driver assist features have been widely supported in the modern vehicles. Some of these features include pedestrian/bicycle detection, collision avoidance by estimating the front car distance, lane departure warning, etc. However, in this project, we target autonomous steering, which is a relatively unexplored task in the field of computer vision and machine learning. 
+
 		<br/><br/> 
-		PAragraph2
-		<br/><br/> 
-		PAragraph3 
-		<br/> <br/> 
-		Paragraph4
+		In this project, we implement a convolutional neural network (CNN) to map raw pixels from the captured images to the steering commands for a self-driving car. With minimum training data from the humans, the system learns to steer on the road, with or without the lane markings.
+		
         <h2 id="method">Methodology</h2>
-        Procedure here!
+        <h3>Data Collection</h3>
         <center>
         	<figure>
             	<img src="images/Flow.jpg" alt="Flow" style="width:650px;height:130px;">
