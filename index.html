@@ -8,14 +8,14 @@
 .tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;}
 .tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;}
 .tg .tg-yw4l{vertical-align:top}
-.content {color: #00DBE1;}
-.content a:link{color: #00DBE1;}
+.content {color: black;}
+.content a:link{color: blue;}
 .content a:visited{color: #F8933A;}
 p a:visited{color: #F8933A;}
-p a:link{color: #00DBE1;}
+p a:link{color: blue;}
 body {
-    background-color: black;
-    color: white;
+    background-color: white;
+    color: black;
 }
         </style>
     </head>
@@ -34,23 +34,24 @@ body {
             </tr>
             <tr>
                 <td class="tg-yw4l">Nikhil Thakur</td>
-                <td class="tg-yw4l">UID here!</td>
-                <td class="tg-yw4l">Email please!</td>
+                <td class="tg-yw4l">804946345</td>
+                <td class="tg-yw4l">nikhilt44@g.ucla.edu</td>
             </tr>
             <tr>
                 <td class="tg-yw4l">Kelly Bielaski</td>
-                <td class="tg-yw4l">UID here!</td>
-                <td class="tg-yw4l">email please!</td>
+                <td class="tg-yw4l">405023971</td>
+                <td class="tg-yw4l">kellybielaski@ucla.edu</td>
             </tr>
             <tr>
                 <td class="tg-yw4l">Shraddha Manchekar</td>
-                <td class="tg-yw4l">UID here</td>
-                <td class="tg-yw4l">email please!</td>
+                <td class="tg-yw4l">004945217</td>
+                <td class="tg-yw4l">smanchekar@ucla.edu</td>
             </tr>
         </table>
         <h2>Table of Contents</h2>
         <div class="content">
         <ol>
+            <p>Double click on the links</p>
             <li><a href="#abstract">Abstract</a></li>
             <li><a href="#introduction">Introduction</a></li>
             <li><a href="#method">Methodology</a></li>
@@ -74,50 +75,104 @@ body {
 		
         <h2 id="method">Methodology</h2>
         <h3>Data Collection</h3>
+        <p>We used Udacity’s self-driving car simulator for collecting the data. This simulator is built in Unity and was used by Udacity for the Self-Driving Nanodegree program but was recently open-sourced [6]. It replicates what NVIDIA did in the simulation. We can collected all our data from the simulator. Using our keyboard to drive the car, we were able to instruct the simulated vehicle to turn left, right, speed up and slow down. Another important aspect is that this simulator can be used for training as well as testing the model. Hence, it has two modes: (i) Training mode, and (ii) Autonomous mode as shown in Fig. 1.</p>
+        
         <center>
         	<figure>
-            	<img src="images/image6.png" alt = "Flow" style = "width:250px;height:200px";>
-            	<figcaption>Lake track</figcaption>
+            	<img src="images/image9.png" alt = "Flow" style = "width:400px;height:350px;">
+            	<figcaption>Fig 1 : Udacity Simulator</figcaption>
+        	</figure>
+            </center>
+        <p>The training mode is used to collect the data and the autonomous mode is used to test the model. Additionally, there are two types of tracks in the simulator - the lake track and the jungle track. The lake track is relatively smaller and easy to handle the car when compared with the jungle track as shown in Fig. 2 and Fig. 3. The simulator captures data when the car is driven around the track using left and right keys to control the steering angles and up and down arrows to control the speed.</p>
+        <center>
+            <figure>
+            	<img src="images/image6.png" alt = "Flow" style = "width:400px;height:350px;">
+                <br/>
+            	Fig 2 : Lake Track
+        	</figure>
+            <figure>
+            	<img src="images/image3.png" alt = "Flow" style = "width:400px;height:350px;">
+            	<figcaption>Fig 3 : Jungle Track</figcaption>
         	</figure>
         </center>
-        <br>
-        Procedure 2
-
+        
+        
+        <h3>Data Preprocessing</h3>
+        <p> The data that we collect i.e. the captured images are preprocessed before training the model. While preprocessing, the images are cropped to remove the sky and front portion of the car. The images are then converted from RGB to YUV and resized to the input shape used by the model. This is done because RGB is not the best mapping for visual perception. YUV color-spaces is a much more efficient coding and reduces the bandwidth more than RGB capture can. </p>
+        <p>After selecting the final set of frames, the data is augmented by adding artificial shifts and rotations to teach the network how to recover from a poor position or orientation. While augmenting, we randomly choose right, left or center images, randomly flip the images left/right and adjust the steering angle. The steering angle is adjusted by +0.2 for the left image and -0.2 for the right image. Using the left/right flipped images is useful to train the recovery driving scenario. We also randomly translate the image horizontally or vertically with steering angle adjustment. The horizontal translation can be useful for handling scenarios with difficult curves. The magnitude of these changes is chosen randomly from a normal distribution. The distribution has a zero mean. We applied these augmentations using a script from the Udacity repository.</p>
+        <p>Augmented images are added into the current set of images and their corresponding steering angles are also adjusted with respect to augmentation performed. The primary reason for this augmentation is to make the system more robust, thus, learning as much as possible from the environment by using diverse views with diverse settings. </p>
+        <h3>Deep Learning Model</h3>
+        <h4>Convolutional Layer</h4>
+        <p>Convolutional layer applies the convolution function (filter) on the input image and produces a 3D output activation of neurons. This layer helps to find various features of the image which is used for classification. The number of convolutional layers in the network depends on the type of application. The initial convolutional layers in the networks help detect the low level features of the image which are simple and the convolutional layers further help in detecting the high-level features of the image.</p>
+        <h4>Max Pooling Layer</h4>
+        <p>Pooling/Down sampling layer helps in reducing the number of parameters/weights in the network and helps in reducing the training time without losing any specific feature information of the image. This layer produces a smaller image than the input image by downsampling the image using pooling of neurons. There are different types of pooling like max pooling, average pooling, L2-norm pooling etc but max pooling is the one which is most widely used.</p>
+        <h4>Dense Layer</h4>
+        <p>Dense layer or Fully connected layer is the same as normal neural network layer in which all the neurons in this layer are connected to each neurons from previous layer. This layer is generally designed as the final layer in the convolutional neural network.</p>
+        <p>The entire architecture diagram is shown in Fig. 4 There are 5 convolutional layers with varying number of filters and sizes and a dropout after that to handle overfitting. In the end, 3 dense layers were added followed by the output layer. Adam optimizer was used for parameter optimization with a fixed learning rate. Batch size of 100 was chosen and the number of epochs of 50-60 was experimented with. On a machine without GPU, 16 GB ram Core i5 it took roughly 6 hours of training.</p>
         <center>
         	<figure>
-            	<img src="images/flow2.jpg" alt="Flow" style="width:650px;height:250px;">
-            	<figcaption>Image or video</figcaption>
+            	<img src="images/image7.png" alt = "Flow" style = "width:350px;height:1000px;">
+            	<figcaption>Fig 4 : Deep Network Architecture</figcaption>
         	</figure>
         </center>
+        <h3>System Architecture</h3>
+        <p>Fig. 5 shows a high-level architecture of the system. After performing data augmentation on the input images, batches are created from them and fed to the CNN model for training. After the training is completed, the model is used to perform prediction on the steering angle and send the predictions to the Udacity Simulator to drive the car in real time. </p>
+        <center>
+        	<figure>
+            	<img src="images/image4.png" alt = "Flow" style = "width:350px;height:350px;">
+            	<figcaption>Fig 5 : Deep Network Architecture</figcaption>
+        	</figure>
+        </center>
+        <h3>Performance Evaluation</h3>
+        <p>For performance evaluation during training, mean squared error was used as a loss function to keep a track of the performance of the model.</p>
+        <center>
+        	MSE = <figure>
+            	<img src="images/image1.png" alt = "Flow;">
+            	<figcaption>Mean Squared 
+                    Error</figcaption>
+        	</figure>
+        </center>
+        
+        
+        
+        
 
         
         <h2 id="results">Results</h2>
-		Results here!
+        <h3>Autonomous Car 1st iteration of training</h3>
 
         <center>
-        	<figure>
-            	<img src="images/1.jpg" alt="Results" style="width:450px;height:228px;">
-            	<figcaption>Image or video</figcaption>
-		<br/>
-        		<img src="images/2.jpg" alt="Results" style="width:304px;height:200px;">
-            	<figcaption>Image or video</figcaption>
-        	</figure>
+        	<iframe width="560" height="315" src="https://www.youtube.com/embed/lWtfFThW7ac?rel=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
         </center>
+        <center>
+            <br/>
+            <br/>
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/WxCNZ9eexuo?rel=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        </center>
+        
+        <h3>Autonomous Car 2nd iteration of training</h3>
+        <center>
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/vKHyQlQueYA?rel=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        </center>
+        <br/>
+        <br/>
+        <center>
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/_RlP3Oj9fWM?rel=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        </center>
+        
 
         <h2 id="report">Report</h2>
-        <object data="Report.pdf" type="application/pdf">
-            <embed src="Report.pdf" type="application/pdf"/>
-        </object>
 
-        <p>The full file can be found <a href="Report_CS275.pdf">HERE</a>.</p>
+        <p>The full file can be found <a href="ArtificialLifeReport.pdf">HERE</a>.</p>
 
         <h2 id="code">Code</h2>
         <div class="content">
         <ol>
-            <li><a href="PCA/PCA_SV_ORL.m">PCA</a></li>
-            <li><a href="ICA/ICA_SV_ORL.m">ICA</a></li>
-            <li><a href="LDA/LDA_SV_ORL.m">LDA</a></li>
-            <li><a href="NN/classify.m">NN</a></li>
+            <li><a href="Model.py">Model</a></li>
+            <li><a href="Readme.docx">Readme</a></li>
+            <li><a href="environment.yml">Environment</a></li>
+            <li><a href="Utilities.py">Utilities</a></li>
+            <li><a href="connect_drive.py">Drive</a></li>
         </ol>
         </div>
     </body>
